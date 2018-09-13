@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Tax
+from .models import TaxItem
 
 
 class TaxSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Tax
+        model = TaxItem
