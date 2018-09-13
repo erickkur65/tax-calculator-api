@@ -1,6 +1,8 @@
 version: '2'
 
 services:
+  db:
+    image: postgres:10.1-alpine
   web:
     build: .
     command: python3 manage.py runserver 0.0.0.0:8000
@@ -8,3 +10,5 @@ services:
       - .:/src
     ports:
       - "8000:8000"
+    depends_on:
+      - db
