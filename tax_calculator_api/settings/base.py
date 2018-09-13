@@ -14,8 +14,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 INSTALLED_APPS = [
     'bill',
-    'customer',
     'tax',
+    'user',
     'utils',
 
     'django.contrib.admin',
@@ -54,7 +54,7 @@ TEMPLATES = [
     },
 ]
 
-AUTH_USER_MODEL = 'customer.Customer'
+AUTH_USER_MODEL = 'user.User'
 
 WSGI_APPLICATION = 'tax_calculator_api.wsgi.application'
 
