@@ -2,3 +2,5 @@ Django==2.0.7
 djangorestframework==3.8.2
 djangorestframework-jwt==1.11.0
 psycopg2==2.7.3.2
+model-mommy==1.6.0
+PyJWT==1.6.4
