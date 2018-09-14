@@ -1,10 +1,26 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework_jwt.settings import api_settings
+
+from utils.serializers import validate
+from .helpers import EmailModelBackend
+from .serializers import LoginSerializer
 
 
 class Login(generics.CreateAPIView):
+    serializer_class = LoginSerializer
+
     def post(self, request):
-        return Response('login')
+        serializer = self.serializer_class(data=request.data)
+        validate(serializer)
+
+        user = EmailModelBackend().authenticate(
+            request,
+            email=serializer.data['email'],
+            password=serializer.data['password']
+        )
+
+        return _generate_token_response(user)
 
 
 class GetBills(generics.RetrieveAPIView):
@@ -15,3 +31,16 @@ class GetBills(generics.RetrieveAPIView):
 class GetBillDetail(generics.RetrieveAPIView):
     def get(self, request, bill_id):
         return Response('get bill detail')
+
+
+def _generate_token_response(user):
+    jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+    jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+
+    payload = jwt_payload_handler(user)
+    token = jwt_encode_handler(payload)
+
+    return Response(
+        data={'token': token},
+        status=status.HTTP_200_OK
+    )
