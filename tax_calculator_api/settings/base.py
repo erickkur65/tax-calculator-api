@@ -59,6 +59,8 @@ AUTH_USER_MODEL = 'user.User'
 
 WSGI_APPLICATION = 'tax_calculator_api.wsgi.application'
 
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
+
 # Database
 DATABASES = {
     'default': {
@@ -132,3 +134,12 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
+
+# Testing-specific settings
+if TESTING:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory'
+        }
+    }
