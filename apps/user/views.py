@@ -1,10 +1,12 @@
 from rest_framework import generics, status
+from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
 
 from utils.serializers import validate
+from . import settings
 from .helpers import EmailModelBackend
-from .serializers import LoginSerializer
+from .serializers import LoginSerializer, RegistrationSerializer
 
 
 class Login(generics.CreateAPIView):
@@ -19,6 +21,20 @@ class Login(generics.CreateAPIView):
             email=serializer.data['email'],
             password=serializer.data['password']
         )
+
+        if user is None:
+            raise ParseError(settings.MSG_EMAIL_PASSWORD_INVALID)
+
+        return _generate_token_response(user)
+
+
+class Register(generics.CreateAPIView):
+    serializer_class = RegistrationSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        validate(serializer)
+        user = serializer.save()
 
         return _generate_token_response(user)
 

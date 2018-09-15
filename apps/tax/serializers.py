@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ParseError
-from rest_framework.validators import UniqueValidator
 
 from .models import TaxItem
 from . import settings

@@ -1,5 +1,8 @@
-from django.contrib.auth import get_user_model as UserModel
+from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
+
+
+UserModel = get_user_model()
 
 
 class EmailModelBackend(ModelBackend):
@@ -12,7 +15,7 @@ class EmailModelBackend(ModelBackend):
                 self.user_can_authenticate(user)
             ):
                 return user
-        except UserModel.DoesNontExist:
+        except UserModel.DoesNotExist:
             return None
 
         return None
