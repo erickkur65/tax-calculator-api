@@ -39,16 +39,6 @@ class Register(generics.CreateAPIView):
         return _generate_token_response(user)
 
 
-class GetBills(generics.RetrieveAPIView):
-    def get(self, request):
-        return Response('get bills')
-
-
-class GetBillDetail(generics.RetrieveAPIView):
-    def get(self, request, bill_id):
-        return Response('get bill detail')
-
-
 def _generate_token_response(user):
     jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
     jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER

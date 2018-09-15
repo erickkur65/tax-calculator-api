@@ -15,7 +15,6 @@ class TaxSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'tax_code', 'amount')
 
     def create(self, data):
-        tax_amount = 0
         tax_type = ''
         list_tax_code = [
             settings.TAX_CODE_FOOD,
@@ -29,18 +28,12 @@ class TaxSerializer(serializers.ModelSerializer):
         # Calculate tax amount according tax code
         if data['tax_code'] == settings.TAX_CODE_FOOD:
             tax_type = settings.TAX_TYPE_FOOD
-            tax_amount = 0.1 * data['amount']
         elif data['tax_code'] == settings.TAX_CODE_TOBACCO:
             tax_type = settings.TAX_TYPE_TOBACCO
-            tax_amount = 10 + (0.02 * data['amount'])
         elif data['tax_code'] == settings.TAX_CODE_ENTERTAINMENT:
-            if data['amount'] > 100:
-                tax_type = settings.TAX_TYPE_ENTERTAINMENT
-                tax_amount = 0.01 * (data['amount'] - 100)
+            tax_type = settings.TAX_TYPE_ENTERTAINMENT
 
         data['tax_type'] = tax_type
-        data['tax_amount'] = tax_amount
-        data['total_amount'] = data['amount'] + data['tax_amount']
         tax_item = TaxItem.objects.create(**data)
 
         return tax_item

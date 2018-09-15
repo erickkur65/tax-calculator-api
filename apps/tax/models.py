@@ -10,9 +10,3 @@ class TaxItem(BaseModel):
     amount = models.DecimalField(
         max_digits=16,
         decimal_places=4)
-    tax_amount = models.DecimalField(
-        max_digits=16,
-        decimal_places=4)
-    total_amount = models.DecimalField(
-        max_digits=16,
-        decimal_places=4)
