@@ -10,6 +10,10 @@ from .serializers import LoginSerializer, RegistrationSerializer
 
 
 class Login(generics.CreateAPIView):
+    """
+    post:
+    Make user login
+    """
     serializer_class = LoginSerializer
 
     def post(self, request):
@@ -29,6 +33,10 @@ class Login(generics.CreateAPIView):
 
 
 class Register(generics.CreateAPIView):
+    """
+    post:
+    Create new user
+    """
     serializer_class = RegistrationSerializer
 
     def post(self, request):

@@ -14,8 +14,8 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
-    'bill',
     'tax',
+    'transaction',
     'user',
     'utils',
 

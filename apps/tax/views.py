@@ -8,6 +8,14 @@ from .serializers import TaxItemSerializer
 
 
 class TaxItemView(generics.ListCreateAPIView):
+    """
+    get:
+    Get tax item list
+
+    post:
+    Create new tax item
+    """
+
     permission_classes = (IsAuthenticated,)
     serializer_class = TaxItemSerializer
 
