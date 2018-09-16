@@ -4,7 +4,7 @@ from rest_framework.reverse import reverse
 from utils.test import CustomerTestCase
 
 
-class CustomerRegister(CustomerTestCase):
+class CustomerRegisterTest(CustomerTestCase):
     email = 'test@gmail.com'
     password = 'test123'
 
@@ -40,7 +40,7 @@ class CustomerRegister(CustomerTestCase):
         self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
-class CustomerLogin(CustomerTestCase):
+class CustomerLoginTest(CustomerTestCase):
     email = 'test@gmail.com'
     password = 'test123'
 
