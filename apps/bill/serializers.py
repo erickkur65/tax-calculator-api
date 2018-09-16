@@ -2,13 +2,36 @@ from rest_framework import serializers
 from rest_framework.exceptions import ParseError
 
 from tax import settings as tax_settings
+from tax.serializers import TaxItemSerializer
 from utils.generics import to_int
 from . import settings as bill_settings
 from .models import Bill, BillItem
 
 
 class BillSerializer(serializers.Serializer):
-    tax_items = serializers.JSONField()
+    sub_total = serializers.DecimalField(
+        max_digits=16,
+        decimal_places=4,
+        read_only=True
+    )
+    tax_total = serializers.DecimalField(
+        max_digits=16,
+        decimal_places=4,
+        read_only=True
+    )
+    grand_total = serializers.DecimalField(
+        max_digits=16,
+        decimal_places=4,
+        read_only=True
+    )
+    bill_items = serializers.SerializerMethodField(read_only=True)
+    tax_items = serializers.JSONField(write_only=True)
+
+    def get_bill_items(self, obj):
+        bill_items = BillItem.objects.filter(bill_id=obj.id)
+        serializer = BillItemSerializer(bill_items, many=True)
+
+        return serializer.data
 
     def create(self, data):
         if 'tax_items' not in data:
@@ -60,12 +83,16 @@ class BillSerializer(serializers.Serializer):
 
         # Save bill items for current bill
         bill.items.bulk_create(bill_item_list)
-        print(bill_data)
-        print(bill_item_list[1].qty)
 
         return bill
 
 
 class BillItemSerializer(serializers.ModelSerializer):
+    qty = serializers.IntegerField()
+    tax_amount = serializers.DecimalField(max_digits=16, decimal_places=4)
+    total_amount = serializers.DecimalField(max_digits=16, decimal_places=4)
+    tax_item = TaxItemSerializer(read_only=True)
+
     class Meta:
         model = BillItem
+        fields = ('id', 'qty', 'tax_amount', 'total_amount', 'tax_item')

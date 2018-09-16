@@ -5,10 +5,10 @@ from .models import TaxItem
 from . import settings
 
 
-class TaxSerializer(serializers.ModelSerializer):
+class TaxItemSerializer(serializers.ModelSerializer):
     name = serializers.CharField(min_length=3)
     tax_code = serializers.IntegerField()
-    amount = serializers.IntegerField()
+    amount = serializers.DecimalField(max_digits=16, decimal_places=4)
 
     class Meta:
         model = TaxItem

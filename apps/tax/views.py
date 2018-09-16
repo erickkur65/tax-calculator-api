@@ -4,12 +4,12 @@ from rest_framework.response import Response
 
 from utils.serializers import validate
 from .models import TaxItem
-from .serializers import TaxSerializer
+from .serializers import TaxItemSerializer
 
 
 class TaxItemView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = TaxSerializer
+    serializer_class = TaxItemSerializer
 
     def get(self, request):
         tax_items = TaxItem.objects.all()
@@ -22,4 +22,4 @@ class TaxItemView(generics.ListCreateAPIView):
         validate(serializer)
 
         serializer.save()
-        return Response()
+        return Response(serializer.data)
