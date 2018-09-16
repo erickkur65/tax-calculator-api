@@ -16,7 +16,7 @@ class CustomerRegisterTest(CustomerTestCase):
             'password': 'test123'
         }
 
-        response = self.client.post(
+        response = self.guest_client.post(
             reverse('user:register'),
             data=post_data,
             format='json'
@@ -24,7 +24,7 @@ class CustomerRegisterTest(CustomerTestCase):
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data)
 
-    def test_register_fail(self):
+    def test_register_with_registered_email(self):
         post_data = {
             'first_name': 'test',
             'last_name': '123',
@@ -32,7 +32,7 @@ class CustomerRegisterTest(CustomerTestCase):
             'password': self.password
         }
 
-        response = self.client.post(
+        response = self.guest_client.post(
             reverse('user:register'),
             data=post_data,
             format='json'
@@ -50,7 +50,7 @@ class CustomerLoginTest(CustomerTestCase):
             'password': self.password
         }
 
-        response = self.client.post(
+        response = self.guest_client.post(
             reverse('user:login'),
             data=post_data,
             format='json'
@@ -59,13 +59,13 @@ class CustomerLoginTest(CustomerTestCase):
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data)
 
-    def test_login_fail(self):
+    def test_login_wrong_password(self):
         post_data = {
             'email': self.email,
             'password': 'wrong password'
         }
 
-        response = self.client.post(
+        response = self.guest_client.post(
             reverse('user:login'),
             data=post_data,
             format='json'
