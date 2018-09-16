@@ -30,7 +30,16 @@ class BillItem(BaseModel):
         'bill.Bill',
         related_name='items',
         on_delete=models.CASCADE)
+    qty = models.IntegerField(null=True)
     tax_item = models.ForeignKey(
         'tax.TaxItem',
         related_name='bill_items',
         on_delete=models.CASCADE)
+    tax_amount = models.DecimalField(
+        max_digits=16,
+        decimal_places=4,
+        null=True)
+    total_amount = models.DecimalField(
+        max_digits=16,
+        decimal_places=4,
+        null=True)
