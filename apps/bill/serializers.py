@@ -14,9 +14,15 @@ class BillSerializer(serializers.Serializer):
         if 'tax_items' not in data:
             raise ParseError(bill_settings.MSG_TAX_ITEMS_REQUIRED)
 
+        # Initialize bill and bill item data
+        bill_data = {}
         bill_sub_total = 0
         bill_tax_total = 0
         bill_item_list = []
+
+        # Save bill object to use for foreign key in bill item object
+        bill_data['user_id'] = self.context['request'].user.id
+        bill = Bill.objects.create(**bill_data)
 
         for tax_item in data['tax_items']:
             order_amount = to_int(tax_item.get('qty')) * to_int(tax_item.get('amount'))
@@ -34,6 +40,7 @@ class BillSerializer(serializers.Serializer):
             # Assign data for bill item
             total_amount = order_amount + tax_amount
             bill_item = BillItem(
+                bill=bill,
                 qty=tax_item.get('qty'),
                 tax_item_id=tax_item.get('tax_item_id'),
                 tax_amount=tax_amount,
@@ -46,16 +53,13 @@ class BillSerializer(serializers.Serializer):
             bill_tax_total += tax_amount
 
         # Assign and save data for bill
-        bill_data = {}
-        bill_data['user_id'] = self.context['request'].user.id
-        bill_data['sub_total'] = bill_sub_total
-        bill_data['tax_total'] = bill_tax_total
-        bill_data['grand_total'] = bill_sub_total + bill_tax_total
-        #bill = Bill.objects.create(**bill_data)
+        bill.sub_total = bill_sub_total
+        bill.tax_total = bill_tax_total
+        bill.grand_total = bill_sub_total + bill_tax_total
+        bill.save()
 
-        # TODO:
-        # Save bill items
-        #bill.items.bulk_create(bill_item_list)
+        # Save bill items for current bill
+        bill.items.bulk_create(bill_item_list)
         print(bill_data)
         print(bill_item_list[1].qty)
 
