@@ -5,14 +5,27 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from utils.serializers import validate
-from bill import settings
+from transaction import settings
 from .models import Bill
 from .serializers import BillSerializer
 
 
-class CreateBill(generics.CreateAPIView):
+class UserBill(generics.ListCreateAPIView):
+    """
+    get:
+    Get user bills list
+
+    post:
+    Create new user bill and bill items
+    """
     permission_classes = (IsAuthenticated,)
     serializer_class = BillSerializer
+
+    def get(self, request):
+        bills = Bill.objects.filter(user_id=request.user.id)
+        serializer = self.serializer_class(bills, many=True)
+
+        return Response(serializer.data)
 
     def post(self, request):
         serializer = self.serializer_class(
@@ -25,18 +38,11 @@ class CreateBill(generics.CreateAPIView):
         return Response(serializer.data)
 
 
-class GetUserBills(generics.RetrieveAPIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = BillSerializer
-
-    def get(self, request):
-        bills = Bill.objects.filter(user_id=request.user.id)
-        serializer = self.serializer_class(bills, many=True)
-
-        return Response(serializer.data)
-
-
-class GetUserBillDetail(generics.RetrieveAPIView):
+class UserBillDetail(generics.RetrieveAPIView):
+    """
+    get:
+    Get selected user bill detail
+    """
     permission_classes = (IsAuthenticated,)
     serializer_class = BillSerializer
 

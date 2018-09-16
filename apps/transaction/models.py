@@ -27,7 +27,7 @@ class Bill(BaseModel):
 
 class BillItem(BaseModel):
     bill = models.ForeignKey(
-        'bill.Bill',
+        'transaction.Bill',
         related_name='items',
         on_delete=models.CASCADE)
     qty = models.IntegerField(null=True)
