@@ -57,8 +57,23 @@ class BillTest(CustomerTestCase):
         self.assertEqual(Decimal(response_data['tax_total']), 4000)
         self.assertEqual(Decimal(response_data['grand_total']), 44000)
 
-    def test_create_new_user_bill_with_wrong_data(self):
-        data = {}
+    def test_create_new_user_bill_with_invalid_tax_item(self):
+        tax_item_1 = mommy.make(
+            TaxItem,
+            tax_code=tax_settings.TAX_CODE_FOOD,
+            amount=10000
+        )
+
+        data = {
+            'tax_items': [
+                {
+                    'tax_item_id': 100,
+                    'tax_code': tax_item_1.tax_code,
+                    'amount': tax_item_1.amount,
+                    'qty': 2
+                }
+            ]
+        }
 
         response = self.client.post(
             reverse('transaction:user-bills'),

@@ -6,6 +6,7 @@ from tax.serializers import TaxItemSerializer
 from utils.generics import to_int
 from . import settings as bill_settings
 from .models import Bill, BillItem
+from .helpers import check_tax_item_exist
 
 
 class BillSerializer(serializers.Serializer):
@@ -36,6 +37,9 @@ class BillSerializer(serializers.Serializer):
     def create(self, data):
         if 'tax_items' not in data:
             raise ParseError(bill_settings.MSG_TAX_ITEMS_REQUIRED)
+
+        if check_tax_item_exist(data) is False:
+            raise ParseError(bill_settings.MSG_TAX_ITEM_MUST_EXIST_IN_DB)
 
         # Initialize bill and bill item data
         bill_data = {}
