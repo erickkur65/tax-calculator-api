@@ -1,9 +1,9 @@
 from django.conf.urls import url
 
-from .views import CreateTaxItem
+from .views import TaxItemView
 
 app_name = 'tax'
 
 urlpatterns = [
-    url(r'^items/?$', CreateTaxItem.as_view(), name='create-tax-item'),
+    url(r'^items/?$', TaxItemView.as_view(), name='tax-item')
 ]
