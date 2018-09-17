@@ -27,7 +27,7 @@ class TaxItemTest(CustomerTestCase):
         )
         response_data = response.data
 
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue(response.data)
         self.assertEqual(response_data['name'], 'food 1')
         self.assertEqual(response_data['tax_code'], settings.TAX_CODE_FOOD)

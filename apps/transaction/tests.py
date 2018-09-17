@@ -51,7 +51,7 @@ class BillTest(CustomerTestCase):
         )
         response_data = response.data
 
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue(response.data)
         self.assertEqual(Decimal(response_data['sub_total']), 40000)
         self.assertEqual(Decimal(response_data['tax_total']), 4000)
