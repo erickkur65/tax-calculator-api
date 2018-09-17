@@ -47,6 +47,23 @@ class TaxItemTest(CustomerTestCase):
         )
         self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_create_new_tax_item_with_same_tax_name(self):
+        # Make dummy tax item
+        mommy.make(TaxItem, name='food 2')
+
+        data = {
+            'name': 'food 2',
+            'tax_code': 100,
+            'amount': 10000
+        }
+
+        response = self.client.post(
+            reverse('tax:tax-items'),
+            data=data,
+            format='json'
+        )
+        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_get_tax_item_list(self):
         # Make dummy tax item
         mommy.make(TaxItem)

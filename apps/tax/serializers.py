@@ -25,6 +25,10 @@ class TaxItemSerializer(serializers.ModelSerializer):
         if data['tax_code'] not in list_tax_code:
             raise ParseError(settings.MSG_TAX_CODE_REGISTERED)
 
+        # Validate tax name must unique
+        if TaxItem.objects.filter(name=data['name']):
+            raise ParseError(settings.MSG_TAX_NAME_MUST_UNIQUE)
+
         # Calculate tax amount according tax code
         if data['tax_code'] == settings.TAX_CODE_FOOD:
             tax_type = settings.TAX_TYPE_FOOD

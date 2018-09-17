@@ -7,3 +7,4 @@ TAX_TYPE_TOBACCO = 'Tobacco'
 TAX_TYPE_ENTERTAINMENT = 'Entertainment'
 
 MSG_TAX_CODE_REGISTERED = 'tax code tidak ada di sistem'
+MSG_TAX_NAME_MUST_UNIQUE = 'tax name harus unik'
