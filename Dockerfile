@@ -9,7 +9,7 @@ RUN mkdir /src
 WORKDIR /src
 
 # Copy project
-COPY . /src/
+COPY . /src
 
 # Install project dependencies
 RUN apk update && \ 
