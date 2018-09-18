@@ -5,7 +5,7 @@ services:
     image: postgres:10.1-alpine
   web:
     build: .
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/src/tax-calculator-api
     ports:
